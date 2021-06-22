@@ -1,0 +1,11 @@
+
+class MyClient(discord.Client):
+    async def on_ready(self):
+        print('Logged on as', self.user)
+        
+#Your code
+
+      
+            
+client = MyClient()
+client.run(TOKEN HERE) 
