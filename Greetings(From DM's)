@@ -3,5 +3,7 @@ from discord.ext import commands
 
 @client.event
 async def on_member_join(member):
-  mybed = dicord.Embed(
-    colour = 
+  mybed = dicord.Embed( colour = (title = "Sunucumuza Hoşgeldin!", description = f"Merhaba {member.mention} sunucumuza hoşgeldin", color ==0x00ff00)
+  await member.send(embed = mybed)
+    
+    
