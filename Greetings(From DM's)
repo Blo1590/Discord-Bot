@@ -6,15 +6,9 @@ intents = discord.Intents().default()
 intents.members = True
 client = discord.Client(intents=intents)
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as', self.user)
-
-
 @client.event 
 async def on_member_join(member):
     mybed = discord.Embed(title = "Sunucumuza Hoşgeldin!",description = f"Merhaba {member.mention} sunucumuza hoşgeldin", color = 0x00ff00)
     await member.send(embed=mybed)
 
- 
 client.run(token)
