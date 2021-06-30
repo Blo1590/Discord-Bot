@@ -36,4 +36,4 @@ async def on_member_leave(member):
 
 
 
-client.run("ODQ3NzI1ODI5ODM5Mzg4Njcy.YLCQMw.yvlMtkxfdZlGImNpN1vW1dvZyh0")  
+client.run("")  
