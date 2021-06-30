@@ -1,1 +1,39 @@
+import discord
+from discord.embeds import Embed
+from discord.ext import commands
+from discord import client
+from discord import message
+from discord.ext.commands.core import bot_has_permissions, has_permissions
 
+intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True)
+client = commands.Bot(command_prefix = '.', intents = intents)
+
+
+@client.event 
+async def on_member_join(member):
+    mybed = discord.Embed(title = "SE-LAM-LAAAR",description = f"Langton'a hoşgeldin {member.mention}! ", color = 0x00ff00)
+    await member.send(embed=mybed) 
+    
+@client.command()
+@has_permissions(manage_messages=True)
+async def clear(ctx, amount='5'):
+   await ctx.channel.purge(limit=amount)
+
+
+@client.command()
+async def kick(ctx, member : discord.Member, *, reason=None):
+    await member.kick(reason=reason)
+    await ctx.channel.send(f"Kicked {member.mention}:{reason}")
+   
+
+@client.event
+async def on_member_leave(member):
+    leave_embed = discord.Embed( description = f"Görüşürüz {member.mention}", color = discord.Color.green)
+    await message.channel.send(embed=leave_embed)
+
+
+
+
+
+
+client.run("ODQ3NzI1ODI5ODM5Mzg4Njcy.YLCQMw.yvlMtkxfdZlGImNpN1vW1dvZyh0")  
