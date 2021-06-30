@@ -1,17 +1,22 @@
-from typing import ContextManager
 import discord
-from discord import message
-from discord import client
+from discord.embeds import Embed
 from discord.ext import commands
+from discord import client
+from discord import message
+from discord.ext.commands.core import bot_has_permissions, has_permissions
+
+#You need to open intents from Discord Developer Portal
+intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True)
+client = commands.Bot(command_prefix = '.', intents = intents)
 
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as', self.user)
+@client.event
+async def on_ready(self):
+    print('Logged on as', self.user)
 
 #Your code
 
       
             
-client = MyClient()
+
 client.run(TOKEN HERE) 
