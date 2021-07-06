@@ -1,4 +1,6 @@
 import discord
+import json
+import random
 from discord.embeds import Embed
 from discord.ext import commands
 from discord import client
@@ -7,33 +9,102 @@ from discord.ext.commands.core import bot_has_permissions, has_permissions
 
 intents = discord.Intents(messages=True, guilds=True, reactions=True, members=True)
 client = commands.Bot(command_prefix = '.', intents = intents)
+client.remove_command("help")
+@client.event
 
+async def on_ready():
+    await client.change_presence(status=discord.Status.online, activity=discord.Game("napim"))
 
 @client.event 
 async def on_member_join(member):
     mybed = discord.Embed(title = "SE-LAM-LAAAR",description = f"Langton'a hoşgeldin {member.mention}! ", color = 0x00ff00)
+    role = discord.utils.get(member.guild.roles, name="tester")
     await member.send(embed=mybed) 
+    await member.add_roles(role)
+
+@client.command()
+async def info(ctx):
+    infoEmbed = discord.Embed(title="Blo Bot Info:",
+                              description="Information and descrtiption about Blo Bot, a bot developed by Blo#7727",
+                              colour = 0x00ff00)
+    infoEmbed.add_field(name="Brief description of Blo Bot:",
+                        value="The bot is a simply moderation, and fun bot.", inline=False)
+    infoEmbed.add_field(name="Library used:",
+                        value="The bot was developed with discord.py",
+                        inline=False)
+    infoEmbed.add_field(name="Help Command:",
+                        value=".help",                   
+                        inline=False)
+    infoEmbed.add_field(name="Bot owner:",
+                        value="Blo#7727",
+                        inline=False)
+    infoEmbed.set_footer(
+        text="Bot created by Blo#7727(github: Blo1590)")
+    infoEmbed.set_thumbnail(
+        url = "https://cdn.shopify.com/s/files/1/1798/6083/products/the-grey-wind-fox-by-amy-lay-8013_1024x1024.jpg?v=1571609605")
+    await ctx.send(embed=infoEmbed)
+
+@client.command(aliases=["inv"])
+async def invite(ctx):
+    inviteEmbed = discord.Embed(title="Blo Bot invite",
+                                description="[Click here](https://discord.com/api/oauth2/authorize?client_id=847725829839388672&permissions=8&scope=bot) to invite the bot",
+                                color=0x000000)
+    inviteEmbed.set_thumbnail(
+        url="https://pbs.twimg.com/profile_images/1242861639814139905/aiMugf_T_400x400.jpg")
+    await ctx.send(embed=inviteEmbed)
+
+@client.command(aliases=["h"])
+async def help(ctx,*,sector="0"):
+    if str(sector) == "1":
+        Blohelp1 = discord.Embed(title="Help 1: **Commands**")
+       
+        Blohelp1.add_field(name=".ping:" ,
+                             value=f' Returns the bots latency')
+        Blohelp1.add_field(name=".member" ,
+                             value=f' Shows the member count of the server')
+        Blohelp1.add_field(name="serverinfo" ,
+                             value=f' Shows the server info')
+        Blohelp1.add_field(name=".invite" ,
+                             value=f' Gets the invite link of the bot')
+        Blohelp1.set_thumbnail(url = "https://i.pinimg.com/564x/84/bf/14/84bf140018f412dad340cf4d91ce6c6d.jpg")
+        
+        Blohelp1.set_footer(text="Blo Bot created by Blo#7727")
+        await ctx.send(embed=Blohelp1)
     
 @client.command()
 @has_permissions(manage_messages=True)
-async def clear(ctx, amount='5'):
+async def clear(ctx, amount=5):
    await ctx.channel.purge(limit=amount)
 
 
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
-    await ctx.channel.send(f"Kicked {member.mention}:{reason}")
+    await ctx.channel.send(f"Kicked {member.mention}: {reason}")
    
+@client.command()
+@has_permissions(ban_members=True)
+async def ban(ctx, member : discord.Member, *, reason=None):
+    await member.ban(reason=reason)
+    await ctx.send(f"Banned {member.mention}: {reason}")
+
 
 @client.event
-async def on_member_leave(member):
-    leave_embed = discord.Embed( description = f"Görüşürüz {member.mention}", color = discord.Color.green)
-    await message.channel.send(embed=leave_embed)
+async def on_member_remove(member):
+    channel = discord.utils.get(member.guild.channels, name = "adios")
+    await channel.send(f"Adios {member.mention}")
 
+@client.command()
+async def unban(ctx, *, member):
+    banned_users = await ctx.guild.bans()
+    member_name, member_discriminator = member.split('#')
 
+    for ban_entry in banned_users:
+        user = ban_entry.user
 
+        if (user.name, user.discriminator) == (member_name, member_discriminator):
+            await ctx.guild.unban(user)
+            await ctx.send(f"Unbanned {user.name}")
+            
 
-
-
-client.run("")  
+ 
